@@ -33,7 +33,7 @@ workflow_status:
   tech-spec: "docs/tech-spec.md"
 
   # Phase 2: Implementation
-  sprint-planning: required
+  sprint-planning: "docs/sprint-status.yaml"
 
 # Story Backlog
 # Stories are listed in implementation order
