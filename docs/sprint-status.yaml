@@ -40,7 +40,7 @@ story_location: "{project-root}/docs/stories"
 
 development_status:
   epic-1: backlog
-  story-executive-dashboard-1: review
+  story-executive-dashboard-1: done
   story-executive-dashboard-2: drafted
   story-executive-dashboard-3: drafted
   epic-1-retrospective: optional
