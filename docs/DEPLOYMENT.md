@@ -35,6 +35,9 @@
    DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.your-project.supabase.co:5432/postgres
    ```
 
+   **Note:** The app is configured for serverless environments with connection pooling.
+   You can use the standard connection string (port 5432) as shown above.
+
 4. **Deploy:**
    - Click "Deploy"
    - Wait for build to complete (~2-3 minutes)
@@ -264,6 +267,28 @@ npm install -D @sveltejs/adapter-vercel
 ```bash
 # Solution: Verify Supabase credentials
 # Check RLS policies in Supabase
+```
+
+**Error:** `Database connection failed` or `unable to connect to database`
+```bash
+# IMPORTANT: Serverless platforms like Vercel require connection pooling
+#
+# The app is already configured with serverless-friendly settings in:
+# src/lib/server/db/client.ts
+#
+# Solution 1: Verify Environment Variable (Most Common)
+# - Go to Vercel Dashboard → Settings → Environment Variables
+# - Ensure DATABASE_URL is set for Production, Preview, and Development
+# - Format: postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres
+# - Click "Save" and redeploy
+#
+# Solution 2: Use Supabase Connection Pooler (Alternative)
+# If you still have issues, use the pooler connection string:
+# - In Supabase: Settings → Database → Connection Pooling → Connection string
+# - Port will be 6543 instead of 5432
+# - Format: postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:6543/postgres
+# - Add ?pgbouncer=true to the end
+# - Update DATABASE_URL in Vercel and redeploy
 ```
 
 ### Performance Issues
