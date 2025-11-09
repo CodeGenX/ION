@@ -26,3 +26,6 @@ playwright/.cache/
 # Drizzle
 drizzle/**/*.sql
 !drizzle/seed.ts
+
+# Vercel
+.vercel
