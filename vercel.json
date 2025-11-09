@@ -1,11 +1,4 @@
 {
-	"buildCommand": "npm run build",
-	"devCommand": "npm run dev",
-	"installCommand": "npm install",
-	"framework": "sveltekit",
-	"git": {
-		"deploymentEnabled": true
-	},
 	"headers": [
 		{
 			"source": "/(.*)",
