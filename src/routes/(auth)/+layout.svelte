@@ -65,7 +65,7 @@
 			<nav class="flex-1 space-y-1 px-2 py-4">
 				<a
 					href="/dashboard"
-					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-surface-300 hover:bg-surface-800 hover:text-white"
+					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
 				>
 					<svg
 						class="mr-3 h-6 w-6"
@@ -85,7 +85,7 @@
 
 				<a
 					href="/portfolio"
-					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-surface-300 hover:bg-surface-800 hover:text-white"
+					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
 				>
 					<svg
 						class="mr-3 h-6 w-6"
@@ -105,7 +105,7 @@
 
 				<a
 					href="/roadmap"
-					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-surface-300 hover:bg-surface-800 hover:text-white"
+					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
 				>
 					<svg
 						class="mr-3 h-6 w-6"
@@ -125,7 +125,7 @@
 
 				<a
 					href="/settings"
-					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-surface-300 hover:bg-surface-800 hover:text-white"
+					class="flex items-center rounded-lg px-4 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
 				>
 					<svg
 						class="mr-3 h-6 w-6"
