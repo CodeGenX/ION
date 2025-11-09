@@ -1,13 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
-import * as dotenv from 'dotenv';
-
-// Load environment variables (for standalone scripts)
-dotenv.config();
-
-// Get DATABASE_URL from environment
-const DATABASE_URL = process.env.DATABASE_URL;
+import { DATABASE_URL } from '$env/static/private';
 
 if (!DATABASE_URL) {
 	throw new Error('DATABASE_URL environment variable is not set');

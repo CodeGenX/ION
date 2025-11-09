@@ -32,6 +32,7 @@
    ```
    PUBLIC_SUPABASE_URL=your_supabase_project_url
    PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.your-project.supabase.co:5432/postgres
    ```
 
 4. **Deploy:**
@@ -69,6 +70,9 @@
 
    vercel env add PUBLIC_SUPABASE_ANON_KEY
    # Paste your Supabase anon key when prompted
+
+   vercel env add DATABASE_URL
+   # Paste your database connection string when prompted
    ```
 
 ---
@@ -81,6 +85,7 @@
 |----------|-------------|---------|
 | `PUBLIC_SUPABASE_URL` | Your Supabase project URL | `https://xxxxx.supabase.co` |
 | `PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anonymous key | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` |
+| `DATABASE_URL` | PostgreSQL connection string | `postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres` |
 
 ### Where to Find Values
 
@@ -89,6 +94,8 @@
 3. Copy:
    - **Project URL** → `PUBLIC_SUPABASE_URL`
    - **anon public** key → `PUBLIC_SUPABASE_ANON_KEY`
+4. Navigate to **Settings** → **Database** → **Connection string** → **URI**
+5. Copy and replace `[YOUR-PASSWORD]` with your database password → `DATABASE_URL`
 
 ---
 
