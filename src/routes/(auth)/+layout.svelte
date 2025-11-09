@@ -294,7 +294,16 @@
 		{#if sidebarOpen}
 			<div
 				class="fixed inset-0 z-40 bg-surface-600 bg-opacity-75 lg:hidden"
+				role="button"
+				tabindex="0"
+				aria-label="Close sidebar"
 				onclick={toggleSidebar}
+				onkeydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						toggleSidebar();
+					}
+				}}
 			></div>
 		{/if}
 	</div>
