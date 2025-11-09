@@ -16,11 +16,21 @@ export const handle: Handle = async ({ event, resolve }) => {
 	});
 
 	/**
-	 * a little helper that is written for convenience so that instead
-	 * of calling `const { data: { session } } = await supabase.auth.getSession()`
-	 * you just call this `await getSession()`
+	 * Unlike getSession(), getUser() validates the session by contacting the
+	 * Supabase Auth server, making it more secure. This prevents accepting
+	 * potentially tampered session data from cookies.
 	 */
 	event.locals.getSession = async () => {
+		const {
+			data: { user },
+			error
+		} = await event.locals.supabase.auth.getUser();
+
+		if (error || !user) {
+			return null;
+		}
+
+		// If user is valid, we can safely get the session
 		const {
 			data: { session }
 		} = await event.locals.supabase.auth.getSession();
