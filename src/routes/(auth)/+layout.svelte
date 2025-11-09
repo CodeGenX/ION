@@ -21,8 +21,10 @@
 	onMount(() => {
 		const {
 			data: { subscription }
-		} = supabase.auth.onAuthStateChange((event, _session) => {
-			if (_session?.expires_at !== data.session?.expires_at) {
+		} = supabase.auth.onAuthStateChange((event) => {
+			// Invalidate on any auth state change to trigger server-side validation
+			// The server uses getUser() for secure validation
+			if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
 				invalidate('supabase:auth');
 			}
 		});
