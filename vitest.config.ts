@@ -1,8 +1,6 @@
 import { defineConfig } from 'vitest/config';
-import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
-	plugins: [sveltekit()],
 	test: {
 		include: ['tests/unit/**/*.{test,spec}.{js,ts}'],
 		environment: 'node',
@@ -10,7 +8,7 @@ export default defineConfig({
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'json', 'html'],
-			include: ['src/lib/server/trpc/**/*.ts']
+			include: ['src/lib/server/trpc/**/*.ts', 'src/lib/components/widgets/**/*.svelte']
 		}
 	}
 });

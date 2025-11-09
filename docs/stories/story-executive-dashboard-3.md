@@ -1,6 +1,7 @@
 # Story 1.3: Dashboard Widgets Implementation
 
-**Status:** Draft
+**Status:** Done
+**Completed:** 2025-11-09
 
 ---
 
