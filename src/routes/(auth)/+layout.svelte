@@ -4,9 +4,7 @@
 	import { supabase } from '$lib/supabase/client';
 	import type { LayoutData } from './$types';
 
-	export let data: LayoutData;
-
-	let { children } = $props();
+	let { data, children }: { data: LayoutData; children: any } = $props();
 	let sidebarOpen = $state(true);
 	let aiPanelOpen = $state(false);
 
