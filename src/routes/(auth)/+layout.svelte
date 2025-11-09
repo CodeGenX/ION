@@ -2,11 +2,21 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabase/client';
+	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import type { LayoutData } from './$types';
 
 	let { data, children }: { data: LayoutData; children: any } = $props();
 	let sidebarOpen = $state(true);
 	let aiPanelOpen = $state(false);
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				staleTime: 5 * 60 * 1000, // 5 minutes
+				refetchOnWindowFocus: false
+			}
+		}
+	});
 
 	onMount(() => {
 		const {
@@ -34,9 +44,10 @@
 	}
 </script>
 
-<div class="flex h-screen overflow-hidden bg-surface-50">
-	<!-- Sidebar -->
-	<aside
+<QueryClientProvider client={queryClient}>
+	<div class="flex h-screen overflow-hidden bg-surface-50">
+		<!-- Sidebar -->
+		<aside
 		class="fixed inset-y-0 left-0 z-50 w-64 transform bg-surface-900 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 {sidebarOpen
 			? 'translate-x-0'
 			: '-translate-x-full'}"
@@ -279,11 +290,12 @@
 		</div>
 	{/if}
 
-	<!-- Overlay for mobile sidebar -->
-	{#if sidebarOpen}
-		<div
-			class="fixed inset-0 z-40 bg-surface-600 bg-opacity-75 lg:hidden"
-			onclick={toggleSidebar}
-		></div>
-	{/if}
-</div>
+		<!-- Overlay for mobile sidebar -->
+		{#if sidebarOpen}
+			<div
+				class="fixed inset-0 z-40 bg-surface-600 bg-opacity-75 lg:hidden"
+				onclick={toggleSidebar}
+			></div>
+		{/if}
+	</div>
+</QueryClientProvider>

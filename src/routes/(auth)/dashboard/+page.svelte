@@ -1,4 +1,11 @@
 <script lang="ts">
+	import PortfolioHealthWidget from '$lib/components/widgets/PortfolioHealthWidget.svelte';
+	import ValueDeliveryWidget from '$lib/components/widgets/ValueDeliveryWidget.svelte';
+	import ActiveInitiativesWidget from '$lib/components/widgets/ActiveInitiativesWidget.svelte';
+	import TeamHealthWidget from '$lib/components/widgets/TeamHealthWidget.svelte';
+	import RiskIndicatorsWidget from '$lib/components/widgets/RiskIndicatorsWidget.svelte';
+	import RecentUpdatesWidget from '$lib/components/widgets/RecentUpdatesWidget.svelte';
+
 	let { data } = $props();
 </script>
 
@@ -10,36 +17,13 @@
 		</p>
 	</div>
 
-	<!-- Placeholder for dashboard widgets -->
+	<!-- Dashboard Widgets -->
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-		<div class="rounded-lg bg-white p-6 shadow">
-			<h3 class="text-lg font-medium text-surface-900">Portfolio Health</h3>
-			<p class="mt-2 text-sm text-surface-600">Widget coming in Story 3...</p>
-		</div>
-
-		<div class="rounded-lg bg-white p-6 shadow">
-			<h3 class="text-lg font-medium text-surface-900">Value Delivery</h3>
-			<p class="mt-2 text-sm text-surface-600">Widget coming in Story 3...</p>
-		</div>
-
-		<div class="rounded-lg bg-white p-6 shadow">
-			<h3 class="text-lg font-medium text-surface-900">Active Initiatives</h3>
-			<p class="mt-2 text-sm text-surface-600">Widget coming in Story 3...</p>
-		</div>
-
-		<div class="rounded-lg bg-white p-6 shadow">
-			<h3 class="text-lg font-medium text-surface-900">Team Health</h3>
-			<p class="mt-2 text-sm text-surface-600">Widget coming in Story 3...</p>
-		</div>
-
-		<div class="rounded-lg bg-white p-6 shadow">
-			<h3 class="text-lg font-medium text-surface-900">Risk Indicators</h3>
-			<p class="mt-2 text-sm text-surface-600">Widget coming in Story 3...</p>
-		</div>
-
-		<div class="rounded-lg bg-white p-6 shadow">
-			<h3 class="text-lg font-medium text-surface-900">Recent Updates</h3>
-			<p class="mt-2 text-sm text-surface-600">Widget coming in Story 3...</p>
-		</div>
+		<PortfolioHealthWidget />
+		<ValueDeliveryWidget />
+		<ActiveInitiativesWidget />
+		<TeamHealthWidget />
+		<RiskIndicatorsWidget />
+		<RecentUpdatesWidget />
 	</div>
 </div>
