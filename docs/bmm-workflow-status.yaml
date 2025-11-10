@@ -30,7 +30,25 @@ workflow_path: "quick-flow-greenfield.yaml"
 
 workflow_status:
   # Phase 1: Planning
-  tech-spec: required
+  tech-spec: "docs/tech-spec.md"
 
   # Phase 2: Implementation
-  sprint-planning: required
+  sprint-planning: "docs/sprint-status.yaml"
+
+# Story Backlog
+# Stories are listed in implementation order
+story_backlog:
+  - story_file: "docs/stories/story-executive-dashboard-1.md"
+    title: "Database & API Foundation"
+    status: "TODO"
+    story_points: 3
+
+  - story_file: "docs/stories/story-executive-dashboard-2.md"
+    title: "UI Foundation & Authentication"
+    status: "TODO"
+    story_points: 3
+
+  - story_file: "docs/stories/story-executive-dashboard-3.md"
+    title: "Dashboard Widgets Implementation"
+    status: "TODO"
+    story_points: 5
