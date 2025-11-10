@@ -48,20 +48,37 @@ console.log('🔌 Initializing postgres client for serverless...');
 // Key settings for serverless compatibility:
 // - max: 1 (one connection per function instance)
 // - prepare: false (required for connection poolers)
-// - No timeouts on idle/connect - let Vercel handle the lifecycle
 const client = postgres(DATABASE_URL, {
 	max: 1,
 	prepare: false,
-	// Don't set idle_timeout or connect_timeout - let the connection persist
-	// for the lifetime of the serverless function instance
-	fetch_types: false, // Disable type fetching for faster cold starts
-	publications: 'supabase_realtime',
+	fetch_types: false,
 	transform: {
 		undefined: null
+	},
+	// Add explicit error handler
+	onnotice: () => {},
+	// Enable connection for transaction pooling mode
+	connection: {
+		application_name: 'ion-vercel'
 	}
 });
 
 console.log('✅ Postgres client initialized');
+
+// Test the connection immediately
+(async () => {
+	try {
+		console.log('🧪 Testing database connection...');
+		await client`SELECT 1 as test`;
+		console.log('✅ Database connection test successful');
+	} catch (error) {
+		console.error('❌ Database connection test failed:', {
+			message: error instanceof Error ? error.message : String(error),
+			code: (error as any)?.code,
+			errno: (error as any)?.errno
+		});
+	}
+})();
 
 // Create and export drizzle instance
 export const db = drizzle(client, { schema });
