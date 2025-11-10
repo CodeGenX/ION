@@ -14,16 +14,16 @@ function getDatabaseUrl(): string {
 			nodeEnv: process.env.NODE_ENV,
 			vercelEnv: process.env.VERCEL_ENV,
 			availableEnvKeys: Object.keys(env).join(', '),
-			availableProcessKeys: Object.keys(process.env).filter(k =>
-				k.includes('DATABASE') || k.includes('SUPABASE') || k.includes('VERCEL')
-			).join(', ')
+			availableProcessKeys: Object.keys(process.env)
+				.filter((k) => k.includes('DATABASE') || k.includes('SUPABASE') || k.includes('VERCEL'))
+				.join(', ')
 		};
 
 		console.error('❌ DATABASE_URL not found!', JSON.stringify(envInfo, null, 2));
 		throw new Error(
 			`DATABASE_URL environment variable is not set. ` +
-			`Available env keys: ${envInfo.availableEnvKeys}. ` +
-			`Check Vercel Dashboard → Settings → Environment Variables`
+				`Available env keys: ${envInfo.availableEnvKeys}. ` +
+				`Check Vercel Dashboard → Settings → Environment Variables`
 		);
 	}
 
@@ -38,40 +38,30 @@ function getDatabaseUrl(): string {
 	return url;
 }
 
-let cachedClient: postgres.Sql | null = null;
+// Create a single postgres client for the module
+// In serverless, this will be created once per cold start and reused
+const DATABASE_URL = getDatabaseUrl();
 
-function getClient(): postgres.Sql {
-	if (cachedClient) {
-		return cachedClient;
+console.log('🔌 Initializing postgres client for serverless...');
+
+// Create postgres connection optimized for Vercel serverless
+// Key settings for serverless compatibility:
+// - max: 1 (one connection per function instance)
+// - prepare: false (required for connection poolers)
+// - No timeouts on idle/connect - let Vercel handle the lifecycle
+const client = postgres(DATABASE_URL, {
+	max: 1,
+	prepare: false,
+	// Don't set idle_timeout or connect_timeout - let the connection persist
+	// for the lifetime of the serverless function instance
+	fetch_types: false, // Disable type fetching for faster cold starts
+	publications: 'supabase_realtime',
+	transform: {
+		undefined: null
 	}
+});
 
-	const DATABASE_URL = getDatabaseUrl();
+console.log('✅ Postgres client initialized');
 
-	try {
-		console.log('🔌 Creating postgres client...');
-
-		// Create postgres connection with serverless-friendly configuration
-		cachedClient = postgres(DATABASE_URL, {
-			max: 1, // Limit to 1 connection per serverless function instance
-			idle_timeout: 20, // Close idle connections after 20 seconds
-			connect_timeout: 10, // Fail fast if connection takes too long
-			prepare: false, // Disable prepared statements for connection pooling compatibility
-			onnotice: () => {}, // Suppress notices
-			debug: false,
-			// Add error handler
-			onclose: () => console.log('🔌 Database connection closed'),
-			connection: {
-				application_name: 'ion-vercel'
-			}
-		});
-
-		console.log('✅ Postgres client created successfully');
-		return cachedClient;
-	} catch (error) {
-		console.error('❌ Failed to create postgres client:', error);
-		throw error;
-	}
-}
-
-// Create drizzle instance with lazy client
-export const db = drizzle(getClient(), { schema });
+// Create and export drizzle instance
+export const db = drizzle(client, { schema });
