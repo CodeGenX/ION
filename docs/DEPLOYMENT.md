@@ -30,13 +30,15 @@
 3. **Add Environment Variables:**
    Click "Environment Variables" and add:
    ```
-   PUBLIC_SUPABASE_URL=your_supabase_project_url
+   PUBLIC_SUPABASE_URL=https://your-project.supabase.co
    PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.your-project.supabase.co:5432/postgres
+   DATABASE_URL=postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres
    ```
 
-   **Note:** The app is configured for serverless environments with connection pooling.
-   You can use the standard connection string (port 5432) as shown above.
+   **IMPORTANT:** For serverless deployments, you MUST use the Transaction pooler connection string:
+   - Port: 6543 (not 5432)
+   - Hostname: `pooler.supabase.com` (not `db.supabase.co`)
+   - Find this in Supabase: Settings → Database → Connection string → Transaction mode
 
 4. **Deploy:**
    - Click "Deploy"
@@ -88,7 +90,7 @@
 |----------|-------------|---------|
 | `PUBLIC_SUPABASE_URL` | Your Supabase project URL | `https://xxxxx.supabase.co` |
 | `PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anonymous key | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` |
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres` |
+| `DATABASE_URL` | PostgreSQL connection string (Transaction pooler) | `postgresql://postgres.[ref]:[PASSWORD]@aws-0-[region].pooler.supabase.com:6543/postgres` |
 
 ### Where to Find Values
 
@@ -97,8 +99,10 @@
 3. Copy:
    - **Project URL** → `PUBLIC_SUPABASE_URL`
    - **anon public** key → `PUBLIC_SUPABASE_ANON_KEY`
-4. Navigate to **Settings** → **Database** → **Connection string** → **URI**
-5. Copy and replace `[YOUR-PASSWORD]` with your database password → `DATABASE_URL`
+4. Navigate to **Settings** → **Database** → **Connection string**
+5. **IMPORTANT:** Select "Transaction" mode from the dropdown (not "Session")
+6. Copy the connection string (should have port 6543 and `pooler.supabase.com`) → `DATABASE_URL`
+7. Replace `[YOUR-PASSWORD]` with your actual database password
 
 ---
 
@@ -269,26 +273,23 @@ npm install -D @sveltejs/adapter-vercel
 # Check RLS policies in Supabase
 ```
 
-**Error:** `Database connection failed` or `unable to connect to database`
+**Error:** `Database connection failed`, `ENOTFOUND db.*.supabase.co`, or `unable to connect to database`
 ```bash
-# IMPORTANT: Serverless platforms like Vercel require connection pooling
+# CRITICAL: Serverless platforms like Vercel REQUIRE the Transaction pooler connection
 #
-# The app is already configured with serverless-friendly settings in:
-# src/lib/server/db/client.ts
+# Solution: Use Supabase Transaction Pooler (REQUIRED for Vercel)
+# 1. In Supabase Dashboard: Settings → Database → Connection string
+# 2. Select "Transaction" mode from the dropdown
+# 3. Copy the connection string
+#    Format: postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[region].pooler.supabase.com:6543/postgres
+#    - Must use port 6543 (pooler), NOT 5432 (direct)
+#    - Must use pooler.supabase.com hostname, NOT db.*.supabase.co
+# 4. Update DATABASE_URL in Vercel Dashboard → Settings → Environment Variables
+# 5. Click "Save" and redeploy
 #
-# Solution 1: Verify Environment Variable (Most Common)
-# - Go to Vercel Dashboard → Settings → Environment Variables
-# - Ensure DATABASE_URL is set for Production, Preview, and Development
-# - Format: postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres
-# - Click "Save" and redeploy
-#
-# Solution 2: Use Supabase Connection Pooler (Alternative)
-# If you still have issues, use the pooler connection string:
-# - In Supabase: Settings → Database → Connection Pooling → Connection string
-# - Port will be 6543 instead of 5432
-# - Format: postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:6543/postgres
-# - Add ?pgbouncer=true to the end
-# - Update DATABASE_URL in Vercel and redeploy
+# Why this is required:
+# - Direct connections (port 5432) don't work in serverless environments
+# - Transaction pooler (port 6543) is designed for serverless with connection pooling
 ```
 
 ### Performance Issues

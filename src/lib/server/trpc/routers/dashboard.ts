@@ -5,21 +5,14 @@ import { desc, eq, sql } from 'drizzle-orm';
 export const dashboardRouter = router({
 	// Procedure 1: Get Portfolio Health (RAG breakdown)
 	getPortfolioHealth: publicProcedure.query(async ({ ctx }) => {
-		try {
-			console.log('🔍 Querying initiatives table...');
-			const allInitiatives = await ctx.db.select().from(initiatives);
-			console.log('✅ Portfolio health query successful, found', allInitiatives.length, 'initiatives');
+		const allInitiatives = await ctx.db.select().from(initiatives);
 
-			return {
-				total: allInitiatives.length,
-				red: allInitiatives.filter((i) => i.ragStatus === 'red').length,
-				amber: allInitiatives.filter((i) => i.ragStatus === 'amber').length,
-				green: allInitiatives.filter((i) => i.ragStatus === 'green').length
-			};
-		} catch (error) {
-			console.error('❌ Failed to get portfolio health:', error);
-			throw error;
-		}
+		return {
+			total: allInitiatives.length,
+			red: allInitiatives.filter((i) => i.ragStatus === 'red').length,
+			amber: allInitiatives.filter((i) => i.ragStatus === 'amber').length,
+			green: allInitiatives.filter((i) => i.ragStatus === 'green').length
+		};
 	}),
 
 	// Procedure 2: Get Value Delivery (delivered vs. target value)
